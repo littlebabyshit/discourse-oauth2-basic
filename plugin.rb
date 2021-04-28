@@ -33,6 +33,15 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
       result
     end
   end
+    # 添加appid
+  def request_phase
+  #
+    params = client.auth_code.authorize_params.merge(authorize_params)
+    params["appid"] = params.delete("client_id")
+    params["redirect_uri"] = callback_url
+    redirect client.authorize_url(params)
+    # 源码
+  end
 
   def callback_url
     Discourse.base_url_no_prefix + script_name + callback_path
