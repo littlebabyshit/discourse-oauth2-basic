@@ -13,31 +13,10 @@ enabled_site_setting :oauth2_enabled
 class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
   option :name, "oauth2_basic"
 
-#   uid do
-#     if path = SiteSetting.oauth2_callback_user_id_path.split('.')
-#       recurse(access_token, [*path]) if path.present?
-#     end
-#   end
-
   uid do
-        raw_info['openid']
-      end
-
-  info do
-    {
-      nickname:   raw_info['nickname'],
-      sex:        raw_info['sex'],
-      province:   raw_info['province'],
-      city:       raw_info['city'],
-      country:    raw_info['country'],
-      headimgurl: raw_info['headimgurl'],
-      image:      raw_info['headimgurl'],
-      unionid:    raw_info['unionid']
-    }
-  end
-
-  extra do
-    {raw_info: raw_info}
+    if path = SiteSetting.oauth2_callback_user_id_path.split('.')
+      recurse(access_token, [*path]) if path.present?
+    end
   end
 
   info do
@@ -63,31 +42,7 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
     redirect client.authorize_url(params)
     # 源码
   end
-  # 解析openid
-  def raw_info
-    @uid ||= access_token["openid"]
-    @raw_info ||= begin
-      access_token.options[:mode] = :query
-      if access_token["scope"]&.include?("snsapi_userinfo")
-        access_token.get("/sns/userinfo", :params => { "openid" => @uid, "lang" => "zh_CN" }, parse: :json).parsed
-      else
-        { "openid" => @uid }
-      end
-    end
-    @raw_info
-  end
-    # 获取token
-  protected
-  def build_access_token
-    params = {
-      'appid'        => client.id,
-      'secret'       => client.secret,
-      'code'         => request.params['code'],
-      'grant_type'   => 'authorization_code',
-      'redirect_uri' => callback_url
-      }.merge(token_params.to_hash(symbolize_keys: true))
-    client.get_token(params, deep_symbolize(options.auth_token_params))
-  end
+
   def callback_url
     Discourse.base_url_no_prefix + script_name + callback_path
   end
