@@ -13,10 +13,31 @@ enabled_site_setting :oauth2_enabled
 class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
   option :name, "oauth2_basic"
 
+#   uid do
+#     if path = SiteSetting.oauth2_callback_user_id_path.split('.')
+#       recurse(access_token, [*path]) if path.present?
+#     end
+#   end
+
   uid do
-    if path = SiteSetting.oauth2_callback_user_id_path.split('.')
-      recurse(access_token, [*path]) if path.present?
-    end
+        raw_info['openid']
+      end
+
+  info do
+    {
+      nickname:   raw_info['nickname'],
+      sex:        raw_info['sex'],
+      province:   raw_info['province'],
+      city:       raw_info['city'],
+      country:    raw_info['country'],
+      headimgurl: raw_info['headimgurl'],
+      image:      raw_info['headimgurl'],
+      unionid:    raw_info['unionid']
+    }
+  end
+
+  extra do
+    {raw_info: raw_info}
   end
 
   info do
@@ -47,7 +68,7 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
     @uid ||= access_token["openid"]
     @raw_info ||= begin
       access_token.options[:mode] = :query
-      if access_token["scope"]&.include?("snsapi_login")
+      if access_token["scope"]&.include?("snsapi_userinfo")
         access_token.get("/sns/userinfo", :params => { "openid" => @uid, "lang" => "zh_CN" }, parse: :json).parsed
       else
         { "openid" => @uid }
