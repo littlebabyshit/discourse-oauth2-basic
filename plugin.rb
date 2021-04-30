@@ -33,26 +33,66 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
       result
     end
   end
-    # 添加appid
-  def request_phase
-  #
-    params = client.auth_code.authorize_params.merge(authorize_params)
-    params["appid"] = params.delete("client_id")
-    params["redirect_uri"] = callback_url
-    redirect client.authorize_url(params)
-    # 源码
+#     # 添加appid
+#   def request_phase
+#   #
+#     params = client.auth_code.authorize_params.merge(authorize_params)
+#     params["appid"] = params.delete("client_id")
+#     params["redirect_uri"] = callback_url
+#     redirect client.authorize_url(params)
+#     # 源码
+#   end
+  uid do
+    @uid ||= begin
+      access_token.params['openid']
+    end
   end
-  protected
-  def build_access_token
-    params = {
-      'appid'        => client.id,
-      'secret'       => client.secret,
-      'code'         => request.params['code'],
-      'grant_type'   => 'authorization_code',
-      'redirect_uri' => callback_url
-      }.merge(token_params.to_hash(symbolize_keys: true))
-    client.get_token(params, deep_symbolize(options.auth_token_params))
+
+  info do
+    {
+      :nickname => raw_info['nickname'],
+      :name => raw_info['nickname'],
+      :image => raw_info['headimgurl'],
+    }
   end
+
+  extra do
+    {
+      :raw_info => raw_info
+    }
+  end
+
+  def raw_info
+    @raw_info ||= begin
+      response = client.request(:get, "https://api.weixin.qq.com/sns/userinfo", :params => {
+        :openid => uid,
+        :access_token => access_token.token
+      }, :parse => :json)
+      response.parsed
+    end
+  end
+
+  # customization
+  def authorize_params
+    super.tap do |params|
+      params[:appid] = options.client_id
+      params[:scope] = 'snsapi_user'
+      params.delete('client_id')
+
+    end
+  end
+  def token_params
+    super.tap do |params|
+      params[:appid] = options.client_id
+      params[:secret] = options.client_secret
+      params[:parse] = :json
+      params.delete('client_id')
+      params.delete('client_secret')
+    end
+  end
+
+
+
   def callback_url
     Discourse.base_url_no_prefix + script_name + callback_path
   end
