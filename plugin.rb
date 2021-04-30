@@ -76,7 +76,7 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
   def authorize_params
     super.tap do |params|
       params[:appid] = options.client_id
-      params[:scope] = 'snsapi_user'
+      params[:scope] = 'snsapi_userinfo'
       params.delete('client_id')
 
     end
