@@ -53,6 +53,7 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
       :nickname => raw_info['nickname'],
       :name => raw_info['nickname'],
       :image => raw_info['headimgurl'],
+      :email => raw_info['email']+"weixin@qq.com"
     }
   end
 
