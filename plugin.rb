@@ -300,7 +300,7 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
     return true if SiteSetting.oauth2_email_verified
     verified = auth['info']['email_verified']
     verified = true if verified == "true"
-    verified = true if verified == "false"
+    verified = false if verified == "false"
     verified
   end
 
