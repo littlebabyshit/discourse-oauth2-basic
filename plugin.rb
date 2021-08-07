@@ -44,7 +44,7 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
 #   end
   uid do
     @uid ||= begin
-      access_token.params['openid']
+      access_token.params['unionid']
     end
   end
 
