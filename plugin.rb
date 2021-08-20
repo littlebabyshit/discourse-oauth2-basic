@@ -65,7 +65,7 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
 
   def raw_info
     @raw_info ||= begin
-      response = client.request(:get, "https://api.weixin.qq.com/sns/userinfo", :params => {
+      response = client.request(:get, "https://login.ceshiren.com/lixu/discourse/userinfo", :params => {
         :openid => uid,
         :access_token => access_token.token
       }, :parse => :json)
