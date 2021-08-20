@@ -44,7 +44,7 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
 #   end
   uid do
     @uid ||= begin
-      access_token.params['openid']
+      access_token.params['unionid']
     end
   end
 
@@ -77,7 +77,7 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
   def authorize_params
     super.tap do |params|
       params[:appid] = options.client_id
-      params[:scope] = 'snsapi_userinfo'
+      params[:scope] = 'snsapi_login'
       params.delete('client_id')
 
     end
