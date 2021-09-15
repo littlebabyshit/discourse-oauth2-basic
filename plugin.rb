@@ -84,17 +84,14 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
   end
   def token_params
     super.tap do |params|
-    log("token_params #{request.params}")
-
-      appid = request.params["appid"]
-      secret = request.params["secret"]
-      params[:appid] = appid
-      params[:secret] = secret
+      params[:appid] = options.client_id
+      params[:secret] = options.client_secret
       params[:parse] = :json
       params.delete('client_id')
       params.delete('client_secret')
     end
   end
+
 
 #   def build_access_token
 #
