@@ -45,6 +45,9 @@ login:
   oauth2_button_title:
     default: 'with OAuth2'
     client: true
+  oauth2_button_title_2:
+    default: 'wechat'
+    client: true
   oauth2_allow_association_change:
     default: false
   oauth2_disable_csrf:

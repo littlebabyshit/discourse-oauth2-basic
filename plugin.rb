@@ -113,9 +113,7 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
 
   def build_access_token
     verifier = request.params["code"]
-    puts "#{verifier+",ok"}"
     Rails.logger.warn("verifier Debugging: #{verifier}")
-
     appid = request.params["appid"]
     secret = request.params["secret"]
     puts "#{appid+",ok"}"
@@ -381,6 +379,9 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
 end
 
 auth_provider title_setting: "oauth2_button_title",
+              authenticator: OAuth2BasicAuthenticator.new
+
+auth_provider title_setting: "oauth2_button_title_2",
               authenticator: OAuth2BasicAuthenticator.new
 
 
