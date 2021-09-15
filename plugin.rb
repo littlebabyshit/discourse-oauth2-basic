@@ -159,8 +159,8 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
                           token_method: SiteSetting.oauth2_token_url_method.downcase.to_sym
                         }
                         opts[:authorize_options] = SiteSetting.oauth2_authorize_options.split("|").map(&:to_sym)
-
-
+                        if env.HTTP_USER_AGENT
+                        log("env.HTTP_USER_AGENT: #{env.HTTP_USER_AGENT}")
 
                         if SiteSetting.oauth2_authorize_signup_url.present? &&
                             ActionDispatch::Request.new(env).params["signup"].present?
@@ -175,10 +175,10 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
                           opts[:token_params] = { headers: { 'Authorization' => basic_auth_header } }
                           log("auth_header: #{oauth2_send_auth_header}")
                           log("auth_scheme: #{opts[:client_options][:auth_scheme]}")
-
                         elsif SiteSetting.oauth2_send_auth_header?
                           opts[:client_options][:auth_scheme] = :basic_auth
-
+                          log("auth_header: #{oauth2_send_auth_header}")
+                          log("auth_scheme: #{opts[:client_options][:auth_scheme]}")
 
                         else
                           opts[:client_options][:auth_scheme] = :request_body
