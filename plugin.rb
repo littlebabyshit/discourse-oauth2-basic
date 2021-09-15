@@ -159,7 +159,7 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
                           token_method: SiteSetting.oauth2_token_url_method.downcase.to_sym
                         }
                         opts[:authorize_options] = SiteSetting.oauth2_authorize_options.split("|").map(&:to_sym)
-                        if env.HTTP_USER_AGENT
+#                         if env.HTTP_USER_AGENT
                         log("env.HTTP_USER_AGENT: #{env.HTTP_USER_AGENT}")
 
                         if SiteSetting.oauth2_authorize_signup_url.present? &&

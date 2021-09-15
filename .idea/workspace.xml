@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="47c59a8b-f3cc-4efd-a60e-72b84772f677" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/plugin.rb" beforeDir="false" afterPath="$PROJECT_DIR$/plugin.rb" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="ProjectId" id="1wJOQIGxbLBa9JRIXFgpMqqsNgO" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="47c59a8b-f3cc-4efd-a60e-72b84772f677" name="Default Changelist" comment="" />
+      <created>1628173206125</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1628173206125</updated>
+    </task>
+    <task id="LOCAL-00001" summary="修改为网页登录">
+      <created>1628352073367</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1628352073367</updated>
+    </task>
+    <task id="LOCAL-00002" summary="修改provide 为uid">
+      <created>1628357187962</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1628357187962</updated>
+    </task>
+    <task id="LOCAL-00003" summary="添加日志信息">
+      <created>1631696606276</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1631696606276</updated>
+    </task>
+    <task id="LOCAL-00004" summary="添加日志信息">
+      <created>1631696622011</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1631696622011</updated>
+    </task>
+    <task id="LOCAL-00005" summary="添加日志信息">
+      <created>1631698179618</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1631698179618</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="修改为网页登录" />
+    <MESSAGE value="修改provide 为uid" />
+    <MESSAGE value="添加日志信息" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加日志信息" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="666" y="160" key="CommitChangelistDialog2" timestamp="1631698179537">
+      <screen x="0" y="23" width="2560" height="1417" />
+    </state>
+    <state x="437" y="122" key="CommitChangelistDialog2/0.23.1680.1027@0.23.1680.1027" timestamp="1628357187868" />
+    <state x="666" y="160" key="CommitChangelistDialog2/0.23.2560.1417@0.23.2560.1417" timestamp="1631698179537" />
+    <state x="152" y="161" width="2256" height="1142" key="DiffContextDialog" timestamp="1628230807641">
+      <screen x="0" y="23" width="2560" height="1417" />
+    </state>
+    <state x="100" y="123" width="1480" height="827" key="DiffContextDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1628173796154" />
+    <state x="152" y="161" width="2256" height="1142" key="DiffContextDialog/0.23.2560.1417@0.23.2560.1417" timestamp="1628230807641" />
+    <state x="979" y="404" key="Vcs.Push.Dialog.v2" timestamp="1631698180931">
+      <screen x="0" y="23" width="2560" height="1417" />
+    </state>
+    <state x="642" y="299" key="Vcs.Push.Dialog.v2/0.23.1680.1027@0.23.1680.1027" timestamp="1628357189494" />
+    <state x="979" y="404" key="Vcs.Push.Dialog.v2/0.23.2560.1417@0.23.2560.1417" timestamp="1631698180931" />
+    <state x="1173" y="500" width="586" height="490" key="find.popup" timestamp="1631692930531">
+      <screen x="0" y="23" width="2560" height="1417" />
+    </state>
+    <state x="1173" y="500" width="586" height="490" key="find.popup/0.23.2560.1417@0.23.2560.1417" timestamp="1631692930531" />
+    <state x="1081" y="348" width="670" height="676" key="search.everywhere.popup" timestamp="1631696445070">
+      <screen x="0" y="23" width="2560" height="1417" />
+    </state>
+    <state x="1081" y="348" width="670" height="676" key="search.everywhere.popup/0.23.2560.1417@0.23.2560.1417" timestamp="1631696445070" />
+  </component>
+</project>
