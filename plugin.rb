@@ -93,20 +93,22 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
   end
 
 
-#   def build_access_token
-#
-#     verifier = request.params["code"]
-#
-#     response = client.request(:get, "https://api.weixin.qq.com/sns/oauth2/access_token",
-#     :params => {
-#         :appid => appid,
-#         :secret => secret,
-#         :code => verifier,
-#         :grant_type => "authorization_code"
-#       }, :parse => :json)
-#     response.parsed
-# #     client.auth_code.get_token(verifier, {:redirect_uri => callback_url}.merge(token_params.to_hash(:symbolize_keys => true)), deep_symbolize(options.auth_token_params))
-#   end
+  def build_access_token
+    log("request.params #{request.params}")
+    verifier = request.params["code"]
+    appid = request.params["appid"]
+    secret = request.params["secret"]
+
+    response = client.request(:get, "https://api.weixin.qq.com/sns/oauth2/access_token",
+    :params => {
+        :appid => appid,
+        :secret => secret,
+        :code => verifier,
+        :grant_type => "authorization_code"
+      }, :parse => :json)
+    response.parsed
+#     client.auth_code.get_token(verifier, {:redirect_uri => callback_url}.merge(token_params.to_hash(:symbolize_keys => true)), deep_symbolize(options.auth_token_params))
+  end
 
 
 
