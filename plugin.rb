@@ -109,14 +109,15 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
 #     response.parsed
 # #     client.auth_code.get_token(verifier, {:redirect_uri => callback_url}.merge(token_params.to_hash(:symbolize_keys => true)), deep_symbolize(options.auth_token_params))
 #   end
+    Rails.logger.warn("OAuth2 Debugging: #{info}") if SiteSetting.oauth2_debug_auth
+
   def build_access_token
     verifier = request.params["code"]
     appid = request.params["appid"]
     secret = request.params["secret"]
-    log("request.params: #{verifier}")
-    log("appid: #{appid}")
-    log("secret: #{secret}")
-
+    Rails.logger.warn("verifier Debugging: #{verifier}")
+    Rails.logger.warn("appid Debugging: #{appid}")
+    Rails.logger.warn("secret Debugging: #{secret}")
     client.auth_code.get_token(verifier, {:redirect_uri => callback_url}.merge(token_params.to_hash(:symbolize_keys => true)), deep_symbolize(options.auth_token_params))
   end
 
