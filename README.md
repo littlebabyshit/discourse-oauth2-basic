@@ -165,3 +165,4 @@ Make sure the plugin has been installed, then from the discourse directory run:
 ### License
 
 MIT
+# wechat_phone

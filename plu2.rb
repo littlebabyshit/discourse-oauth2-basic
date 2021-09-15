@@ -33,66 +33,6 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
       result
     end
   end
-#     # 添加appid
-#   def request_phase
-#   #
-#     params = client.auth_code.authorize_params.merge(authorize_params)
-#     params["appid"] = params.delete("client_id")
-#     params["redirect_uri"] = callback_url
-#     redirect client.authorize_url(params)
-#     # 源码
-#   end
-  uid do
-    @uid ||= begin
-      access_token.params['unionid']
-    end
-  end
-
-  info do
-    {
-      :nickname => raw_info['nickname'],
-      :name => raw_info['nickname'],
-      :image => raw_info['headimgurl'],
-      :email => raw_info['email']
-    }
-  end
-
-  extra do
-    {
-      :raw_info => raw_info
-    }
-  end
-
-  def raw_info
-    @raw_info ||= begin
-      response = client.request(:get, "https://login.ceshiren.com/lixu/discourse/userinfo", :params => {
-        :openid => uid,
-        :access_token => access_token.token
-      }, :parse => :json)
-      response.parsed
-    end
-  end
-
-  # customization
-  def authorize_params
-    super.tap do |params|
-      params[:appid] = options.client_id
-      params[:scope] = 'snsapi_login'
-      params.delete('client_id')
-
-    end
-  end
-  def token_params
-    super.tap do |params|
-      params[:appid] = options.client_id
-      params[:secret] = options.client_secret
-      params[:parse] = :json
-      params.delete('client_id')
-      params.delete('client_secret')
-    end
-  end
-
-
 
   def callback_url
     Discourse.base_url_no_prefix + script_name + callback_path
@@ -130,6 +70,10 @@ class OAuth2FaradayFormatter < Faraday::Logging::Formatter
     LOG
   end
 end
+
+# You should use this register if you want to add custom paths to traverse the user details JSON.
+# We'll store the value in the user associated account's extra attribute hash using the full path as the key.
+DiscoursePluginRegistry.define_filtered_register :oauth2_basic_additional_json_paths
 
 class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
   def name
@@ -224,8 +168,8 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
     end
   end
 
-  def json_walk(result, user_json, prop)
-    path = SiteSetting.public_send("oauth2_json_#{prop}_path")
+  def json_walk(result, user_json, prop, custom_path: nil)
+    path = custom_path || SiteSetting.public_send("oauth2_json_#{prop}_path")
     if path.present?
       #this.[].that is the same as this.that, allows for both this[0].that and this.[0].that path styles
       path = path.gsub(".[].", ".").gsub(".[", "[")
@@ -289,6 +233,11 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
         json_walk(result, user_json, :email)
         json_walk(result, user_json, :email_verified)
         json_walk(result, user_json, :avatar)
+
+        DiscoursePluginRegistry.oauth2_basic_additional_json_paths.each do |detail|
+          prop = "extra:#{detail}"
+          json_walk(result, user_json, prop, custom_path: detail)
+        end
       end
       result
     else
@@ -297,8 +246,6 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
   end
 
   def primary_email_verified?(auth)
-    log("primary_email_verified: \n\ncreds: #{auth['info']['email_verified']}")
-
     return true if SiteSetting.oauth2_email_verified
     verified = auth['info']['email_verified']
     verified = true if verified == "true"
@@ -314,9 +261,6 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
     log("after_authenticate response: \n\ncreds: #{auth['credentials'].to_hash}\nuid: #{auth['uid']}\ninfo: #{auth['info'].to_hash}\nextra: #{auth['extra'].to_hash}")
 
     if SiteSetting.oauth2_fetch_user_details?
-        log("after_authenticate response: \n\ncreds: #{auth['credentials']['token']}\nuid: #{auth['uid']}")
-        log("after_authenticate response: \n\nnuid: #{auth['uid']}")
-
       if fetched_user_details = fetch_user_details(auth['credentials']['token'], auth['uid'])
         auth['uid'] = fetched_user_details[:user_id] if fetched_user_details[:user_id]
         auth['info']['nickname'] = fetched_user_details[:username] if fetched_user_details[:username]
@@ -346,9 +290,5 @@ end
 
 auth_provider title_setting: "oauth2_button_title",
               authenticator: OAuth2BasicAuthenticator.new
-
-auth_provider title_setting: wechat2,
-              authenticator: OAuth2BasicAuthenticator.new
-
 
 load File.expand_path("../lib/validators/oauth2_basic/oauth2_fetch_user_details_validator.rb", __FILE__)
