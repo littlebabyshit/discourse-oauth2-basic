@@ -190,12 +190,8 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
                           # is technically disallowed by the spec (RFC2749 Section 5.2)
                           opts[:client_options][:auth_scheme] = :request_body
                           opts[:token_params] = { headers: { 'Authorization' => basic_auth_header } }
-                          log("auth_header: #{oauth2_send_auth_header}")
-                          log("auth_scheme: #{opts[:client_options][:auth_scheme]}")
                         elsif SiteSetting.oauth2_send_auth_header?
                           opts[:client_options][:auth_scheme] = :basic_auth
-                          log("auth_header: #{oauth2_send_auth_header}")
-                          log("auth_scheme: #{opts[:client_options][:auth_scheme]}")
 
                         else
                           opts[:client_options][:auth_scheme] = :request_body
