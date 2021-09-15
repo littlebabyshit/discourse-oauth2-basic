@@ -174,7 +174,7 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
                           opts[:client_options][:auth_scheme] = :request_body
                           opts[:token_params] = { headers: { 'Authorization' => basic_auth_header } }
                           log("auth_header: #{oauth2_send_auth_header}")
-                          log("auth_header: #{opts[:client_options][:auth_scheme]}")
+                          log("auth_scheme: #{opts[:client_options][:auth_scheme]}")
 
                         elsif SiteSetting.oauth2_send_auth_header?
                           opts[:client_options][:auth_scheme] = :basic_auth
