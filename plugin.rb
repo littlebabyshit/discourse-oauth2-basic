@@ -337,4 +337,8 @@ end
 auth_provider title_setting: "oauth2_button_title",
               authenticator: OAuth2BasicAuthenticator.new
 
+auth_provider title_setting: wechat2,
+              authenticator: OAuth2BasicAuthenticator.new
+
+
 load File.expand_path("../lib/validators/oauth2_basic/oauth2_fetch_user_details_validator.rb", __FILE__)
