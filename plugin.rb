@@ -320,7 +320,7 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
 
   def after_authenticate(auth, existing_account: nil)
     log("after_authenticate response: \n\ncreds: #{auth['credentials'].to_hash}\nuid: #{auth['uid']}\ninfo: #{auth['info'].to_hash}\nextra: #{auth['extra'].to_hash}")
-
+    log("env.HTTP_USER_AGENT: #{env.HTTP_USER_AGENT}")
     if SiteSetting.oauth2_fetch_user_details?
         log("after_authenticate response: \n\ncreds: #{auth['credentials']['token']}\nuid: #{auth['uid']}")
         log("after_authenticate response: \n\nnuid: #{auth['uid']}")
