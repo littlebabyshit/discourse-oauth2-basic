@@ -178,8 +178,6 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
                           token_method: SiteSetting.oauth2_token_url_method.downcase.to_sym
                         }
                         opts[:authorize_options] = SiteSetting.oauth2_authorize_options.split("|").map(&:to_sym)
-#                         if env.HTTP_USER_AGENT
-                        log("env.HTTP_USER_AGENT: #{env.HTTP_USER_AGENT}")
 
                         if SiteSetting.oauth2_authorize_signup_url.present? &&
                             ActionDispatch::Request.new(env).params["signup"].present?
@@ -339,7 +337,6 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
 
   def after_authenticate(auth, existing_account: nil)
     log("after_authenticate response1111111: \n\ncreds: #{auth['credentials'].to_hash}\nuid: #{auth['uid']}\ninfo: #{auth['info'].to_hash}\nextra: #{auth['extra'].to_hash}")
-    log("env.HTTP_USER_AGENT11111: #{env.HTTP_USER_AGENT}")
     if SiteSetting.oauth2_fetch_user_details?
         log("after_authenticate response: \n\ncreds: #{auth['credentials']['token']}\nuid: #{auth['uid']}")
         log("after_authenticate response: \n\nnuid: #{auth['uid']}")
