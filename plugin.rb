@@ -148,6 +148,7 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
     omniauth.provider :oauth2_basic,
                       name: name,
                       setup: lambda { |env|
+
                         opts = env['omniauth.strategy'].options
                         opts[:client_id] = SiteSetting.oauth2_client_id
                         opts[:client_secret] = SiteSetting.oauth2_client_secret
@@ -158,6 +159,8 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
                           token_method: SiteSetting.oauth2_token_url_method.downcase.to_sym
                         }
                         opts[:authorize_options] = SiteSetting.oauth2_authorize_options.split("|").map(&:to_sym)
+
+
 
                         if SiteSetting.oauth2_authorize_signup_url.present? &&
                             ActionDispatch::Request.new(env).params["signup"].present?
@@ -170,8 +173,13 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
                           # is technically disallowed by the spec (RFC2749 Section 5.2)
                           opts[:client_options][:auth_scheme] = :request_body
                           opts[:token_params] = { headers: { 'Authorization' => basic_auth_header } }
+                          log("auth_header: #{oauth2_send_auth_header}")
+                          log("auth_header: #{opts[:client_options][:auth_scheme]}")
+
                         elsif SiteSetting.oauth2_send_auth_header?
                           opts[:client_options][:auth_scheme] = :basic_auth
+
+
                         else
                           opts[:client_options][:auth_scheme] = :request_body
                         end
