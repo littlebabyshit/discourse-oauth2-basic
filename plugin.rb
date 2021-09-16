@@ -354,8 +354,8 @@ end
 auth_provider title_setting: "oauth2_button_title",
               authenticator: OAuth2BasicAuthenticator.new(false)
 
-auth_provider title_setting: "oauth2_button_title_2",
-              authenticator: OAuth2BasicAuthenticator.new(true)
+# auth_provider title_setting: "oauth2_button_title_2",
+#               authenticator: OAuth2BasicAuthenticator.new(true)
 
 
 
