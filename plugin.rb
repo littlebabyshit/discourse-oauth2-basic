@@ -132,6 +132,11 @@ class OAuth2FaradayFormatter < Faraday::Logging::Formatter
 end
 
 class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
+
+  def initialize(is_phone)
+     @is_phone=is_phone
+  end
+
   def name
     'oauth2_basic'
   end
@@ -145,6 +150,7 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
   end
 
   def register_middleware(omniauth)
+
     omniauth.provider :oauth2_basic,
                       name: name,
                       setup: lambda { |env|
@@ -153,7 +159,7 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
                         opts[:client_secret] = SiteSetting.oauth2_client_secret
                         opts[:provider_ignores_state] = SiteSetting.oauth2_disable_csrf
                         opts[:client_options] = {
-                          authorize_url: SiteSetting.oauth2_authorize_url,
+                          authorize_url: @is_phone ? "https://open.weixin.qq.com/connect/oauth2/authorize" : SiteSetting.oauth2_authorize_url,
                           token_url: SiteSetting.oauth2_token_url,
                           token_method: SiteSetting.oauth2_token_url_method.downcase.to_sym
                         }
@@ -343,70 +349,13 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
     SiteSetting.oauth2_enabled
   end
 end
-#
-#
-# class ::PhoneOAuth2BasicAuthenticator <  OAuth2BasicAuthenticator
-#
-# #   def name
-# #     'wechat'
-# #   end
-#   def register_middleware(omniauth)
-#     omniauth.provider :oauth2_basic,
-#                       name: name,
-#                       setup: lambda { |env|
-#
-#                         opts = env['omniauth.strategy'].options
-#                         opts[:client_id] = "wx47f30bcd6424793f"
-#                         opts[:client_secret] = "5e36473892521786e4106bb01edb3ad0"
-#                         opts[:provider_ignores_state] = SiteSetting.oauth2_disable_csrf
-#                         opts[:client_options] = {
-#                           authorize_url: "https://open.weixin.qq.com/connect/oauth2/authorize",
-#                           token_url: SiteSetting.oauth2_token_url,
-#                           token_method: SiteSetting.oauth2_token_url_method.downcase.to_sym
-#                         }
-#                         opts[:authorize_options] = SiteSetting.oauth2_authorize_options.split("|").map(&:to_sym)
-#
-#                         if SiteSetting.oauth2_authorize_signup_url.present? &&
-#                             ActionDispatch::Request.new(env).params["signup"].present?
-#                           opts[:client_options][:authorize_url] = SiteSetting.oauth2_authorize_signup_url
-#                         end
-#
-#                         if SiteSetting.oauth2_send_auth_header? && SiteSetting.oauth2_send_auth_body?
-#                           # For maximum compatibility we include both header and body auth by default
-#                           # This is a little unusual, and utilising multiple authentication methods
-#                           # is technically disallowed by the spec (RFC2749 Section 5.2)
-#                           opts[:client_options][:auth_scheme] = :request_body
-#                           opts[:token_params] = { headers: { 'Authorization' => basic_auth_header } }
-#                         elsif SiteSetting.oauth2_send_auth_header?
-#                           opts[:client_options][:auth_scheme] = :basic_auth
-#
-#                         else
-#                           opts[:client_options][:auth_scheme] = :request_body
-#                         end
-#
-#                         unless SiteSetting.oauth2_scope.blank?
-#                           opts[:scope] = SiteSetting.oauth2_scope
-#                         end
-#
-#                         if SiteSetting.oauth2_debug_auth && defined? OAuth2FaradayFormatter
-#                           opts[:client_options][:connection_build] = lambda { |builder|
-#                             builder.response :logger, Rails.logger, { bodies: true, formatter: OAuth2FaradayFormatter }
-#
-#                             # Default stack:
-#                             builder.request :url_encoded             # form-encode POST params
-#                             builder.adapter Faraday.default_adapter  # make requests with Net::HTTP
-#                           }
-#                         end
-#                       }
-#   end
-# end
 
 
 auth_provider title_setting: "oauth2_button_title",
-              authenticator: OAuth2BasicAuthenticator.new
+              authenticator: OAuth2BasicAuthenticator.new(false)
 
 auth_provider title_setting: "oauth2_button_title_2",
-              authenticator: OAuth2BasicAuthenticator.new
+              authenticator: OAuth2BasicAuthenticator.new(true)
 
 
 
