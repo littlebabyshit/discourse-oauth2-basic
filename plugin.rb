@@ -341,10 +341,10 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
   def enabled?
     SiteSetting.oauth2_enabled
   end
-end
+endr
 
 
-class ::PhoneOAuth2BasicAuthenticato <  OAuth2BasicAuthenticato
+class ::PhoneOAuth2BasicAuthenticator <  OAuth2BasicAuthenticator
 
 #   def name
 #     'wechat'
@@ -405,7 +405,7 @@ auth_provider title_setting: "oauth2_button_title",
               authenticator: OAuth2BasicAuthenticator.new
 
 auth_provider title_setting: "oauth2_button_title_2",
-              authenticator: PhoneOAuth2BasicAuthenticato.new
+              authenticator: PhoneOAuth2BasicAuthenticator.new
 
 
 
