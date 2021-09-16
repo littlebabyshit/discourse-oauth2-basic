@@ -147,7 +147,6 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
     omniauth.provider :oauth2_basic,
                       name: name,
                       setup: lambda { |env|
-
                         opts = env['omniauth.strategy'].options
                         opts[:client_id] = SiteSetting.oauth2_client_id
                         opts[:client_secret] = SiteSetting.oauth2_client_secret
@@ -350,7 +349,6 @@ class ::PhoneOAuth2BasicAuthenticato <  OAuth2BasicAuthenticato
 #   def name
 #     'wechat'
 #   end
-
   def register_middleware(omniauth)
     omniauth.provider :oauth2_basic,
                       name: name,
@@ -400,7 +398,7 @@ class ::PhoneOAuth2BasicAuthenticato <  OAuth2BasicAuthenticato
                         end
                       }
   end
-
+end
 
 
 auth_provider title_setting: "oauth2_button_title",
