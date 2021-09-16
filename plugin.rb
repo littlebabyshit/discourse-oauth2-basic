@@ -93,40 +93,6 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
   end
 
 
-#   def build_access_token
-#     log("request.params #{request.params}")
-#     verifier = request.params["code"]
-#     appid = request.params["appid"]
-#     secret = request.params["secret"]
-#
-#     response = client.request(:get, "https://api.weixin.qq.com/sns/oauth2/access_token",
-#     :params => {
-#         :appid => appid,
-#         :secret => secret,
-#         :code => verifier,
-#         :grant_type => "authorization_code"
-#       }, :parse => :json)
-#     response.parsed
-# #     client.auth_code.get_token(verifier, {:redirect_uri => callback_url}.merge(token_params.to_hash(:symbolize_keys => true)), deep_symbolize(options.auth_token_params))
-#   end
-#     Rails.logger.warn("OAuth2 Debugging: #{info}") if SiteSetting.oauth2_debug_auth
-
-  def build_access_token
-    verifier = request.params["code"]
-    Rails.logger.warn("verifier Debugging: #{verifier}")
-    appid = request.params["appid"]
-    secret = request.params["secret"]
-    puts "#{appid+",ok"}"
-    puts "#{secret+",ok"}"
-
-#     Rails.logger.warn("verifier Debugging: #{verifier}")
-#     Rails.logger.warn("appid Debugging: #{appid}")
-#     Rails.logger.warn("secret Debugging: #{secret}")
-    client.auth_code.get_token(verifier, {:redirect_uri => callback_url}.merge(token_params.to_hash(:symbolize_keys => true)), deep_symbolize(options.auth_token_params))
-  end
-
-
-
   def callback_url
     Discourse.base_url_no_prefix + script_name + callback_path
   end
@@ -378,11 +344,70 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
   end
 end
 
+
+class ::PhoneOAuth2BasicAuthenticato <  OAuth2BasicAuthenticato
+
+#   def name
+#     'wechat'
+#   end
+
+  def register_middleware(omniauth)
+    omniauth.provider :oauth2_basic,
+                      name: name,
+                      setup: lambda { |env|
+
+                        opts = env['omniauth.strategy'].options
+                        opts[:client_id] = "wx47f30bcd6424793f"
+                        opts[:client_secret] = "5e36473892521786e4106bb01edb3ad0"
+                        opts[:provider_ignores_state] = SiteSetting.oauth2_disable_csrf
+                        opts[:client_options] = {
+                          authorize_url: "https://open.weixin.qq.com/connect/oauth2/authorize",
+                          token_url: SiteSetting.oauth2_token_url,
+                          token_method: SiteSetting.oauth2_token_url_method.downcase.to_sym
+                        }
+                        opts[:authorize_options] = SiteSetting.oauth2_authorize_options.split("|").map(&:to_sym)
+
+                        if SiteSetting.oauth2_authorize_signup_url.present? &&
+                            ActionDispatch::Request.new(env).params["signup"].present?
+                          opts[:client_options][:authorize_url] = SiteSetting.oauth2_authorize_signup_url
+                        end
+
+                        if SiteSetting.oauth2_send_auth_header? && SiteSetting.oauth2_send_auth_body?
+                          # For maximum compatibility we include both header and body auth by default
+                          # This is a little unusual, and utilising multiple authentication methods
+                          # is technically disallowed by the spec (RFC2749 Section 5.2)
+                          opts[:client_options][:auth_scheme] = :request_body
+                          opts[:token_params] = { headers: { 'Authorization' => basic_auth_header } }
+                        elsif SiteSetting.oauth2_send_auth_header?
+                          opts[:client_options][:auth_scheme] = :basic_auth
+
+                        else
+                          opts[:client_options][:auth_scheme] = :request_body
+                        end
+
+                        unless SiteSetting.oauth2_scope.blank?
+                          opts[:scope] = SiteSetting.oauth2_scope
+                        end
+
+                        if SiteSetting.oauth2_debug_auth && defined? OAuth2FaradayFormatter
+                          opts[:client_options][:connection_build] = lambda { |builder|
+                            builder.response :logger, Rails.logger, { bodies: true, formatter: OAuth2FaradayFormatter }
+
+                            # Default stack:
+                            builder.request :url_encoded             # form-encode POST params
+                            builder.adapter Faraday.default_adapter  # make requests with Net::HTTP
+                          }
+                        end
+                      }
+  end
+
+
+
 auth_provider title_setting: "oauth2_button_title",
               authenticator: OAuth2BasicAuthenticator.new
 
 auth_provider title_setting: "oauth2_button_title_2",
-              authenticator: OAuth2BasicAuthenticator.new
+              authenticator: PhoneOAuth2BasicAuthenticato.new
 
 
 
