@@ -341,7 +341,7 @@ class ::OAuth2BasicAuthenticator < Auth::ManagedAuthenticator
   def enabled?
     SiteSetting.oauth2_enabled
   end
-endr
+end
 
 
 class ::PhoneOAuth2BasicAuthenticator <  OAuth2BasicAuthenticator
